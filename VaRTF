@@ -1,0 +1,38 @@
+import streamlit as st
+import yfinance as yf
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from scipy.stats import norm
+
+# Título de la aplicación
+st.title("Calculadora de VaR para Acciones de Apple (MXN) con Guardado")
+
+# Parámetros de entrada
+# ... (igual al código anterior)
+
+# Opción para cargar un archivo CSV existente
+uploaded_file = st.file_uploader("Cargar archivo de resultados (CSV)", type=["csv"])
+if uploaded_file is not None:
+    df_resultados = pd.read_csv(uploaded_file)
+
+# Función para guardar los resultados en un archivo CSV
+def guardar_resultados(df_resultados, nuevo_resultado):
+    df_resultados = df_resultados.append(nuevo_resultado, ignore_index=True)
+    st.download_button("Descargar resultados", df_resultados.to_csv(), file_name="resultados_var.csv")
+
+# ... (resto del código para calcular el VaR)
+
+# Crear un DataFrame con los nuevos resultados
+nuevo_resultado = pd.DataFrame({'Fecha': pd.to_datetime('today'),
+                                'VaR': VaR,
+                                'Monto_Invertido': monto_invertir,
+                                'Nivel_Confianza': confidence_level,
+                                'Horizonte': horizon}, index=[0])
+
+# Si hay un archivo cargado, agregar los nuevos resultados
+if uploaded_file is not None:
+    guardar_resultados(df_resultados, nuevo_resultado)
+else:
+    # Si no hay archivo, crear uno nuevo
+    guardar_resultados(pd.DataFrame(), nuevo_resultado)
